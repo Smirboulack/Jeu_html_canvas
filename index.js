@@ -7,35 +7,35 @@ canvas.height = window.innerHeight
 function createChronometer() {
     let startTime = 0;
     let running = false;
-  
+
     function formatTime(milliseconds) {
-      const totalSeconds = Math.floor(milliseconds / 1000);
-      const minutes = Math.floor(totalSeconds / 60);
-      const seconds = totalSeconds % 60;
-  
-      const formattedMinutes = String(minutes).padStart(2, '0');
-      const formattedSeconds = String(seconds).padStart(2, '0');
-  
-      return `${formattedMinutes}:${formattedSeconds}`;
+        const totalSeconds = Math.floor(milliseconds / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+
+        const formattedMinutes = String(minutes).padStart(2, '0');
+        const formattedSeconds = String(seconds).padStart(2, '0');
+
+        return `${formattedMinutes}:${formattedSeconds}`;
     }
-  
+
     function start() {
-      if (!running) {
-        startTime = Date.now();
-        running = true;
-        tick();
-      }
+        if (!running) {
+            startTime = Date.now();
+            running = true;
+            tick();
+        }
     }
-  
+
     function stop() {
-      if (running) {
-        running = false;
-      }
+        if (running) {
+            running = false;
+        }
     }
-  
+
     function reset() {
-      startTime = 0;
-      running = false;
+        startTime = 0;
+        running = false;
     }
 
     function DrawTimer() {
@@ -45,22 +45,22 @@ function createChronometer() {
         const formattedTime = formatTime(currentTime);
         c.fillText(`Time: ${formattedTime}`, 10, 90)
     }
-  
+
     function tick() {
-      if (running) {
-        const currentTime = Date.now() - startTime;
-        const formattedTime = formatTime(currentTime);
-        //console.log(formattedTime);
-        requestAnimationFrame(tick);
-      }
+        if (running) {
+            const currentTime = Date.now() - startTime;
+            const formattedTime = formatTime(currentTime);
+            //console.log(formattedTime);
+            requestAnimationFrame(tick);
+        }
     }
-  
+
     // Retourne un objet avec les méthodes disponibles
     return {
-      start,
-      stop,
-      reset,
-      DrawTimer
+        start,
+        stop,
+        reset,
+        DrawTimer
     };
 }
 
@@ -70,7 +70,7 @@ Timer.start();
 
 
 class Player {
-    constructor({ position, velocity, score, pseudo , alias }) {
+    constructor({ position, velocity, score, pseudo, alias }) {
         this.position = position // {x, y}
         this.velocity = velocity
         this.rotation = 0
@@ -91,8 +91,8 @@ class Player {
         c.fillStyle = 'white'
         c.fillText(`${this.pseudo}`, 10, 60)
         let pseudoWidth = c.measureText(this.pseudo).width
-        c.fillText(`(aka)`, pseudoWidth+15, 60)
-        c.fillText(`${this.alias}`, pseudoWidth+90 , 60)
+        c.fillText(`(aka)`, pseudoWidth + 15, 60)
+        c.fillText(`${this.alias}`, pseudoWidth + 90, 60)
     }
 
     draw() {
@@ -196,13 +196,13 @@ class Asteroid {
 
 do {
     var pseudoprompt = prompt("Entrez votre pseudo : ");
-    if(pseudoprompt.length > 10){
+    if (pseudoprompt.length > 10) {
         alert("Votre pseudo ne doit pas depasser 10 caracteres !")
     }
 } while (pseudoprompt == null || pseudoprompt == "" || pseudoprompt.length > 10);
 
 const player = new Player({
-    
+
     position: { x: canvas.width / 2, y: canvas.height / 2 },
     velocity: { x: 0, y: 0 },
     score: 0,
@@ -246,30 +246,33 @@ const intervalId = window.setInterval(() => {
     let vx, vy
     let radius = 50 * Math.random() + 10
 
+    const centerX = canvas.width / 2
+    const centerY = canvas.height / 2
+
     switch (index) {
         case 0: // left side of the screen
             x = 0 - radius
             y = Math.random() * canvas.height
-            vx = Math.random() * DIFFICULTY
-            vy = 0
+            vx = (centerX - x) / 1000 * DIFFICULTY  // Divise par une valeur fixe pour ajuster la vitesse
+            vy = (centerY - y) / 1000 * DIFFICULTY 
             break
         case 1: // bottom side of the screen
             x = Math.random() * canvas.width
             y = canvas.height + radius
-            vx = 0
-            vy = -Math.random() * DIFFICULTY
+            vx = (centerX - x) / 1000 * DIFFICULTY 
+            vy = (centerY - y) / 1000 * DIFFICULTY 
             break
         case 2: // right side of the screen
             x = canvas.width + radius
             y = Math.random() * canvas.height
-            vx = -Math.random() * DIFFICULTY
-            vy = 0
+            vx = (centerX - x) / 1000 * DIFFICULTY 
+            vy = (centerY - y) / 1000 * DIFFICULTY 
             break
         case 3: // top side of the screen
             x = Math.random() * canvas.width
             y = 0 - radius
-            vx = 0
-            vy = Math.random() * DIFFICULTY
+            vx = (centerX - x) / 1000 * DIFFICULTY 
+            vy = (centerY - y) / 1000 * DIFFICULTY 
             break
     }
 
@@ -353,40 +356,40 @@ function isPointOnLineSegment(x, y, start, end) {
 }
 
 function ManageAlias(score) {
-    if(score >10) {
+    if (score > 10) {
         player.alias = "\"Le joueur\""
-        if(DIFFICULTY<2) {
+        if (DIFFICULTY < 2) {
             DIFFICULTY = 2
         }
     }
-    if(score >20) {
+    if (score > 20) {
         player.alias = "\"Le shooter\""
-        if(DIFFICULTY<4) {
+        if (DIFFICULTY < 4) {
             DIFFICULTY = 4
         }
     }
-    if(score >30) {
+    if (score > 30) {
         player.alias = "\"Skywalker\""
-        if(DIFFICULTY<5) {
+        if (DIFFICULTY < 5) {
             DIFFICULTY = 5
         }
     }
-    if(score >40) {
+    if (score > 40) {
         player.alias = "\"L'incontestable\""
-        if(DIFFICULTY<6) {
+        if (DIFFICULTY < 6) {
             DIFFICULTY = 6
         }
     }
-    if(score >50) {
+    if (score > 50) {
         player.alias = "\"Maître\""
-        if(DIFFICULTY<7) {
+        if (DIFFICULTY < 7) {
             DIFFICULTY = 7
 
         }
     }
-    if(score >60) {
+    if (score > 60) {
         player.alias = "\">Insert Crazy Alias here<\""
-        if(DIFFICULTY<8) {
+        if (DIFFICULTY < 8) {
             DIFFICULTY = 8
         }
     }
