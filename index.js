@@ -178,12 +178,33 @@ class Asteroid {
         this.radius = radius
     }
 
+    
     draw() {
-        c.beginPath()
-        c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, false)
-        c.closePath()
-        c.strokeStyle = 'white'
-        c.stroke()
+        c.beginPath();
+        c.moveTo(this.position.x + this.radius * Math.cos(0), this.position.y + this.radius * Math.sin(0));
+
+        const asteroidPoints = [
+            { x: 1, y: 0.2 },
+            { x: 0.6, y: 1 },
+            { x: 0, y: 0.8 },
+            { x: -0.6, y: 1 },
+            { x: -1, y: 0.6 },
+            { x: -0.8, y: 0.3 },
+            { x: -1, y: -0.2 },
+            { x: -0.6, y: -1 },
+            { x: 0, y: -0.8 }
+        ];
+
+        for (let i = 0; i < asteroidPoints.length; i++) {
+            const point = asteroidPoints[i];
+            const x = this.position.x + this.radius * point.x;
+            const y = this.position.y + this.radius * point.y;
+            c.lineTo(x, y);
+        }
+
+        c.closePath();
+        c.strokeStyle = 'white';
+        c.stroke();
     }
 
     update() {
@@ -254,25 +275,25 @@ const intervalId = window.setInterval(() => {
             x = 0 - radius
             y = Math.random() * canvas.height
             vx = (centerX - x) / 1000 * DIFFICULTY  // Divise par une valeur fixe pour ajuster la vitesse
-            vy = (centerY - y) / 1000 * DIFFICULTY 
+            vy = (centerY - y) / 1000 * DIFFICULTY
             break
         case 1: // bottom side of the screen
             x = Math.random() * canvas.width
             y = canvas.height + radius
-            vx = (centerX - x) / 1000 * DIFFICULTY 
-            vy = (centerY - y) / 1000 * DIFFICULTY 
+            vx = (centerX - x) / 1000 * DIFFICULTY
+            vy = (centerY - y) / 1000 * DIFFICULTY
             break
         case 2: // right side of the screen
             x = canvas.width + radius
             y = Math.random() * canvas.height
-            vx = (centerX - x) / 1000 * DIFFICULTY 
-            vy = (centerY - y) / 1000 * DIFFICULTY 
+            vx = (centerX - x) / 1000 * DIFFICULTY
+            vy = (centerY - y) / 1000 * DIFFICULTY
             break
         case 3: // top side of the screen
             x = Math.random() * canvas.width
             y = 0 - radius
-            vx = (centerX - x) / 1000 * DIFFICULTY 
-            vy = (centerY - y) / 1000 * DIFFICULTY 
+            vx = (centerX - x) / 1000 * DIFFICULTY
+            vy = (centerY - y) / 1000 * DIFFICULTY
             break
     }
 
@@ -436,6 +457,15 @@ function animate() {
             console.log('GAME OVER')
             window.cancelAnimationFrame(animationId)
             clearInterval(intervalId)
+            //Display Game Over Screen in BIG RED LETTERS
+            c.font = '100px Arial'
+            c.fillStyle = 'red'
+            c.fillText(`GAME OVER`, canvas.width / 2 - 250, canvas.height / 2)
+            c.font = '101px Arial'
+            c.fillStyle = 'white'
+            c.fillText(`GAME OVER`, canvas.width / 2 - 250, canvas.height / 2)
+            
+
         }
 
         // garbage collection for projectiles
